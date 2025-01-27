@@ -12,7 +12,7 @@ import (
 
 func (apiCfg *apiConfig) handlerCreateFeedFollow(w http.ResponseWriter, r *http.Request, user database.User) {
 	type parameters struct {
-		FeedID uuid.UUID `json: "feed_id"`
+		FeedID uuid.UUID `json:"feed_id"`
 	}
 	decoder := json.NewDecoder(r.Body)
 
@@ -36,4 +36,13 @@ func (apiCfg *apiConfig) handlerCreateFeedFollow(w http.ResponseWriter, r *http.
 		return
 	}
 	responseWithJSON(w, 201, databaseFeedFollowToFeedFollow(feedFollow))
+}
+
+func (apiCfg *apiConfig) handlerGetFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
+	feedFollows, err := apiCfg.DB.GetFeedFollows(r.Context(), user.ID)
+	if err != nil {
+		responseWithError(w, 400, fmt.Sprintf("Couldn't get feed follow: %v", err))
+		return
+	}
+	responseWithJSON(w, 201, databaseFeedFollowsToFeedFollows(feedFollows))
 }

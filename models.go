@@ -12,7 +12,7 @@ type User struct {
 	CreatedAt time.Time `json: "created_at"`
 	UpdatedAt time.Time `json: "updated_at"`
 	Name      string    `json: "name"`
-	APIKey    string    `json:"api_key"`
+	APIKey    string    `json: "api_key"`
 }
 
 func databaseUserToUser(dbUser database.User) User {
@@ -70,4 +70,13 @@ func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow
 		UserID:    dbFeedFollow.UserID,
 		FeedID:    dbFeedFollow.FeedID,
 	}
+}
+
+func databaseFeedFollowsToFeedFollows(dbFeedFollows []database.FeedFollow) []FeedFollow {
+	feedFollows := []FeedFollow{}
+	for _, dbFeedFollow := range dbFeedFollows {
+		feedFollows = append(feedFollows, databaseFeedFollowToFeedFollow(dbFeedFollow))
+	}
+
+	return feedFollows
 }
